@@ -95,10 +95,12 @@
         <label id="brand-field">Merkki
           <select name="brand"><option value="">Kaikki merkit</option></select>
         </label>
-        <label>Tuote <input name="product" list="product-list" placeholder="esim. yellow"></label>
+        <label><span id="wax-label">Tuote</span>
+          <select name="wax"><option value="">Kaikki tuotteet</option></select>
+        </label>
+        <label>Nimihaku <span class="opt">tai osa nimestä</span> <input name="product" placeholder="esim. yellow"></label>
         <label class="check"><input type="checkbox" name="useConditions"> Huomioi keli</label>
       </form>
-      <datalist id="product-list"></datalist>
       <p class="hint" id="product-hint"></p>
       <div id="product-results"></div>
     </section>

@@ -434,9 +434,15 @@
     const kind = form.elements.kind.value;
     const brand = kind === 'pattern' ? '' : form.elements.brand.value;
     $('#brand-field').hidden = kind === 'pattern';
-    $('#product-list').innerHTML = state.dataset.stats.products[kind]
+    $('#wax-label').textContent = kind === 'pattern' ? 'Kuvio' : 'Tuote';
+    const sel = form.elements.wax;
+    const current = sel.value;
+    const items = state.dataset.stats.products[kind]
       .filter((p) => !brand || p.brand === brand)
-      .map((p) => `<option value="${esc(p.label)}">`).join('');
+      .sort((a, b) => (a.label || a.wax).localeCompare(b.label || b.wax, 'fi'));
+    sel.innerHTML = `<option value="">${kind === 'pattern' ? 'Kaikki kuviot' : 'Kaikki tuotteet'}</option>` +
+      items.map((p) => `<option value="${esc(p.wax)}">${esc(p.label || p.wax)}</option>`).join('');
+    sel.value = items.some((p) => p.wax === current) ? current : '';
   }
 
   function updateProducts(cond = readConditions().cond) {
@@ -452,11 +458,12 @@
     const kind = form.elements.kind.value;
     const brand = kind === 'pattern' ? '' : form.elements.brand.value;
     const product = form.elements.product.value;
+    const wax = form.elements.wax.value;
     const useConditions = form.elements.useConditions.checked;
-    if (!brand && !product.trim()) {
+    if (!brand && !wax && !product.trim()) {
       hint.textContent = kind === 'pattern'
-        ? 'Kirjoita kuvion nimi (tai osa siitä).'
-        : 'Valitse merkki tai kirjoita tuotteen nimi (tai osa siitä).';
+        ? 'Valitse kuvio tai kirjoita sen nimi (tai osa siitä).'
+        : 'Valitse merkki tai tuote, tai kirjoita tuotteen nimi (tai osa siitä).';
       out.innerHTML = '';
       return;
     }
@@ -468,7 +475,7 @@
     }
     const res = WaxCore.searchProducts(
       state.dataset,
-      { brand, product, kind, conditions: useConditions ? cond : undefined },
+      { brand, product, wax, kind, conditions: useConditions ? cond : undefined },
       state.settings,
     );
     hint.textContent = `${res.products.length} ${kind === 'pattern' ? (res.products.length === 1 ? 'kuvio' : 'kuviota') : (res.products.length === 1 ? 'tuote' : 'tuotetta')} · ` +
@@ -494,6 +501,9 @@
 
   let productTimer;
   $('#product-search').addEventListener('input', (e) => {
+    // Valikko ja nimihaku ovat vaihtoehtoisia: kumpaa käytetään, se tyhjentää toisen.
+    if (e.target.name === 'wax' && e.target.value) e.currentTarget.elements.product.value = '';
+    if (e.target.name === 'product' && e.target.value) e.currentTarget.elements.wax.value = '';
     if (e.target.name === 'brand' || e.target.name === 'kind') fillProductList();
     clearTimeout(productTimer);
     productTimer = setTimeout(() => updateProducts(), 200);

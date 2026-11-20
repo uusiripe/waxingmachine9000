@@ -407,18 +407,21 @@
 
   // Tuotehaku: tuotteet, jotka vastaavat merkkiä ja/tai tuotenimen osaa, sekä kaikki reseptit,
   // joissa tuote on mukana.
-  // query: { brand?, product?, kind: 'glide' | 'topcoat' | 'pattern', conditions? }
+  // query: { brand?, product?, wax?, kind: 'glide' | 'topcoat' | 'pattern', conditions? }
+  // product on nimen osa (kirjainkoolla ei väliä), wax on tuotteen tarkka nimi (valikosta).
   // Ilman kelitietoja kaikki testit ovat samanarvoisia (paino 1); kelin kanssa painotus on
   // sama kuin suosituksissa, mutta hakua ei laajenneta.
   function searchProducts(dataset, query, settings) {
     const s = mergeSettings(settings);
     const brand = query.brand || null;
     const product = (query.product || '').trim().toLowerCase();
-    if (!brand && !product) return { products: [], testCount: 0 };
+    const exact = query.wax || null;
+    if (!brand && !product && !exact) return { products: [], testCount: 0 };
     const cond = query.conditions ? normalizeConditions(query.conditions) : null;
     const weightOf = cond ? (t) => testWeight(t, cond, s, 1) : () => 1;
     const { ranked, matches, testCount } = rankRecipes(testsOfKind(dataset, query.kind), weightOf, s);
-    const isHit = (c) => (!brand || c.brand === brand) && (!product || c.wax.toLowerCase().includes(product));
+    const isHit = (c) => (!brand || c.brand === brand) && (!exact || c.wax === exact) &&
+      (!product || c.wax.toLowerCase().includes(product));
 
     const byWax = new Map();
     for (const m of matches) {
