@@ -1,7 +1,7 @@
 // Waxingmachine9000 – offline-tuki. Välimuistissa on vain sovelluksen omat tiedostot;
 // data (CSV:t) on selaimen IndexedDB:ssä eikä kulje tämän kautta.
 // Kasvata versiota, kun tiedostolista muuttuu.
-const CACHE = 'wax9000-v1';
+const CACHE = 'wax9000-v2';
 const ASSETS = [
   './',
   'index.html',

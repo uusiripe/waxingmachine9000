@@ -170,3 +170,12 @@ label.chip {
 }
 label.chip:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 label.chip input { width: auto; margin: 0; accent-color: var(--accent); }
+
+.field { display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem; color: var(--muted); }
+.signed { display: flex; gap: 6px; }
+.signed input { flex: 1; min-width: 0; }
+button.sign {
+  flex: none; width: 44px; padding: 0;
+  background: var(--accent-soft); color: var(--accent); border-color: var(--border);
+  font-size: 1.15rem; font-weight: 600; line-height: 1;
+}

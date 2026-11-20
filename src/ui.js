@@ -218,12 +218,24 @@
       .filter(([, v]) => Number.isNaN(v)).map(([k]) => k);
     if (invalid.length) return { error: `Tarkista luku: ${invalid.join(', ')}` };
     if (missing.length) return { error: `Syötä vielä: ${missing.join(', ')}` };
-    const cond = { air, snow };
+    // Lumen lämpötila on aina ≤ 0, joten positiivinen luku tulkitaan pakkaseksi
+    // (puhelimen numeronäppäimistössä ei ole miinusmerkkiä).
+    const cond = { air, snow: -Math.abs(snow) };
     if (humidity !== null) cond.humidity = humidity;
     if (track !== null) cond.track = track;
     if (raw.place) cond.place = raw.place;
-    return { cond, warning: snow > 0 ? 'Lumen lämpötila on aina ≤ 0 °C.' : '' };
+    return { cond, warning: snow > 0 ? `Lumi tulkittu: ${fmt(cond.snow)} °C (lumi on aina ≤ 0 °C).` : '' };
   }
+
+  // ±-painike vaihtaa etumerkin, koska iPhonen numeronäppäimistössä ei ole miinusta.
+  document.querySelectorAll('#conditions button.sign').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = $('#conditions').elements[btn.dataset.for];
+      const v = input.value.trim();
+      input.value = /^[-−]/.test(v) ? v.slice(1) : `-${v}`;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  });
 
   function restoreConditions() {
     const saved = storageGet(CONDITIONS_KEY);

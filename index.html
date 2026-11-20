@@ -47,8 +47,20 @@
         </div>
       </div>
       <form id="conditions" autocomplete="off">
-        <label>Ilma °C <input name="air" inputmode="decimal" required placeholder="esim. -1,5"></label>
-        <label>Lumi °C <input name="snow" inputmode="decimal" required placeholder="esim. -2,0"></label>
+        <div class="field">
+          <label for="in-air">Ilma °C</label>
+          <div class="signed">
+            <button type="button" class="sign" data-for="air" aria-label="Vaihda ilman lämpötilan etumerkki">±</button>
+            <input id="in-air" name="air" inputmode="decimal" required placeholder="esim. -1,5">
+          </div>
+        </div>
+        <div class="field">
+          <label for="in-snow">Lumi °C</label>
+          <div class="signed">
+            <button type="button" class="sign" data-for="snow" aria-label="Vaihda lumen lämpötilan etumerkki">±</button>
+            <input id="in-snow" name="snow" inputmode="decimal" required placeholder="esim. -2,0">
+          </div>
+        </div>
         <label>Kosteus % <span class="opt">valinnainen</span> <input name="humidity" inputmode="decimal" placeholder="esim. 85"></label>
         <label>Ladun kosteus <span class="opt">valinnainen</span> <input name="track" inputmode="decimal" placeholder="15–90"></label>
         <label>Paikkakunta <span class="opt">valinnainen</span>
