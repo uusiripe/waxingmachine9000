@@ -1,0 +1,4 @@
+# Dataa ei koskaan julkiseen repoon
+*.csv
+*.xlsx
+*.xls

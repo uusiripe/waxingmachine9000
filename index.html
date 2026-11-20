@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Waxingmachine9000</title>
+  <meta name="theme-color" content="#0f1419">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Wax9000">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" href="icons/icon-180.png">
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Waxingmachine9000</h1>
+    <p class="sub">Voidesuositukset omien testien perusteella</p>
+  </header>
+
+  <main>
+    <section class="panel" id="data-panel">
+      <h2>Data</h2>
+      <div class="row buttons">
+        <button type="button" id="pick-dir">Valitse datakansio</button>
+        <button type="button" id="restore-dir" hidden>Avaa tallennettu kansio</button>
+        <button type="button" id="reload-dir" hidden>Lue kansio uudelleen</button>
+        <label class="file-fallback" id="file-fallback" hidden>
+          Lisää CSV-tiedostoja
+          <input type="file" id="pick-files" multiple>
+        </label>
+        <button type="button" id="clear-data" class="secondary" hidden>Poista data laitteelta</button>
+      </div>
+      <p class="status" id="data-status">Dataa ei ole ladattu.</p>
+    </section>
+
+    <section class="panel" id="conditions-panel">
+      <div class="panel-head">
+        <h2>Keli</h2>
+        <div class="toggles" id="section-toggles" role="group" aria-label="Näytettävät suositukset">
+          <span class="toggles-label">Näytä:</span>
+          <label class="chip"><input type="checkbox" value="glide" checked> Luisto</label>
+          <label class="chip"><input type="checkbox" value="topcoat" checked> Pinta</label>
+          <label class="chip"><input type="checkbox" value="pattern" checked> Kuvio</label>
+        </div>
+      </div>
+      <form id="conditions" autocomplete="off">
+        <label>Ilma °C <input name="air" inputmode="decimal" required placeholder="esim. -1,5"></label>
+        <label>Lumi °C <input name="snow" inputmode="decimal" required placeholder="esim. -2,0"></label>
+        <label>Kosteus % <span class="opt">valinnainen</span> <input name="humidity" inputmode="decimal" placeholder="esim. 85"></label>
+        <label>Ladun kosteus <span class="opt">valinnainen</span> <input name="track" inputmode="decimal" placeholder="15–90"></label>
+        <label>Paikkakunta <span class="opt">valinnainen</span>
+          <select name="place"><option value="">Kaikki (ei painotusta)</option></select>
+        </label>
+      </form>
+      <p class="hint" id="form-hint"></p>
+
+      <details class="settings">
+        <summary>Toleranssit ja painot</summary>
+        <form id="settings" autocomplete="off"></form>
+        <button type="button" id="reset-settings" class="link">Palauta oletukset</button>
+      </details>
+    </section>
+
+    <section class="results" id="results" hidden>
+      <div class="result-col" id="glide"></div>
+      <div class="result-col" id="topcoat"></div>
+      <div class="result-col" id="pattern"></div>
+    </section>
+
+    <section class="panel" id="product-panel">
+      <h2>Tuotehaku</h2>
+      <form id="product-search" autocomplete="off">
+        <label>Testit
+          <select name="kind">
+            <option value="glide">Luisto</option>
+            <option value="topcoat">Pinta</option>
+            <option value="pattern">Kuvio</option>
+          </select>
+        </label>
+        <label id="brand-field">Merkki
+          <select name="brand"><option value="">Kaikki merkit</option></select>
+        </label>
+        <label>Tuote <input name="product" list="product-list" placeholder="esim. yellow"></label>
+        <label class="check"><input type="checkbox" name="useConditions"> Huomioi keli</label>
+      </form>
+      <datalist id="product-list"></datalist>
+      <p class="hint" id="product-hint"></p>
+      <div id="product-results"></div>
+    </section>
+  </main>
+
+  <script src="src/core.js"></script>
+  <script src="src/ui.js"></script>
+</body>
+</html>
